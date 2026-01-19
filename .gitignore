@@ -1,0 +1,12 @@
+# Unified Portal - 项目根目录
+/node_modules/
+/dist/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
