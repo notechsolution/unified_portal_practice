@@ -11,6 +11,8 @@
         >
           <el-menu-item index="/home">首页</el-menu-item>
           <el-menu-item index="/dashboard">仪表板</el-menu-item>
+          <el-menu-item index="/credentials">凭证管理</el-menu-item>
+          <el-menu-item index="/audit-logs">审计日志</el-menu-item>
           <el-menu-item index="/profile">用户资料</el-menu-item>
           <el-menu-item index="/settings">系统设置</el-menu-item>
         </el-menu>

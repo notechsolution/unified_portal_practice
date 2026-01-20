@@ -4,6 +4,7 @@ import com.demo.dto.ApiResponse;
 import com.demo.dto.LoginRequest;
 import com.demo.dto.LoginResponse;
 import com.demo.dto.RegisterRequest;
+import com.demo.dto.UserInfoResponse;
 import com.demo.entity.User;
 import com.demo.repository.UserRepository;
 import com.demo.security.JwtTokenProvider;
@@ -11,6 +12,7 @@ import com.demo.service.interfaces.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -174,8 +176,35 @@ public class AuthController {
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> getUserInfo() {
-        // This endpoint would typically return the current authenticated user's information
-        // For now, we'll return a simple message indicating the user is authenticated
-        return ResponseEntity.ok(ApiResponse.success("User is authenticated", null));
+        try {
+            // 获取当前认证的用户信息
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            
+            // 从数据库获取完整的用户信息
+            Optional<User> userOptional = userService.findByUsername(username);
+            if (!userOptional.isPresent()) {
+                return ResponseEntity.status(404)
+                        .body(ApiResponse.error("用户不存在"));
+            }
+            
+            User user = userOptional.get();
+            
+            // 构建返回的用户信息对象
+            UserInfoResponse userInfo = new UserInfoResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.isEnabled(),
+                user.getRoles()
+            );
+            
+            return ResponseEntity.ok(ApiResponse.success(userInfo));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(ApiResponse.error("获取用户信息失败: " + e.getMessage()));
+        }
     }
 }

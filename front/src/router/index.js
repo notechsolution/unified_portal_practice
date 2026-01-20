@@ -31,6 +31,18 @@ const routes = [
         name: 'Settings',
         component: () => import('@/components/views/settings/SettingsView.vue'),
         meta: { title: '系统设置', requiresAuth: true }
+      },
+      {
+        path: '/credentials',
+        name: 'Credentials',
+        component: () => import('@/components/views/credentials/CredentialManagement.vue'),
+        meta: { title: '凭证管理', requiresAuth: true }
+      },
+      {
+        path: '/audit-logs',
+        name: 'AuditLogs',
+        component: () => import('@/components/views/audit/AuditLogView.vue'),
+        meta: { title: '审计日志', requiresAuth: true }
       }
     ]
   },
